@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Rutas - Sistema de Rutas</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <h1 class="mb-4">Gestión de Rutas</h1>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5>Crear Nueva Ruta</h5>
+    </div>
+    <div class="card-body">
+      <form th:action="@{/web/rutas}" th:object="${ruta}" method="post">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="repartidorId">Repartidor</label>
+              <select class="form-control" id="repartidorId" name="repartidorId" required>
+                <option value="">Seleccionar Repartidor...</option>
+                <option th:each="repartidor : ${repartidores}"
+                        th:value="${repartidor.id}"
+                        th:text="${repartidor.nombre}"></option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="fecha">Fecha</label>
+              <input type="date" class="form-control" id="fecha" th:field="*{fecha}" required>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="kmEstimados">KM Estimados</label>
+              <input type="number" step="0.1" class="form-control" id="kmEstimados" th:field="*{kmEstimados}">
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Crear Ruta</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h5>Lista de Rutas</h5>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Repartidor</th>
+            <th>Fecha</th>
+            <th>KM Estimados</th>
+            <th>Estado</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="ruta : ${rutas}">
+            <td th:text="${ruta.id}"></td>
+            <td th:text="${ruta.repartidor.nombre}"></td>
+            <td th:text="${ruta.fecha}"></td>
+            <td th:text="${ruta.kmEstimados}"></td>
+            <td>
+              <span th:text="${ruta.estado}" class="badge bg-primary"></span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Repartidores - Sistema de Rutas</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h1 class="mb-4">Gestión de Repartidores</h1>
+        
+        <!-- Formulario para agregar repartidor -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Agregar Nuevo Repartidor</h5>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/web/repartidores}" th:object="${repartidor}" method="post">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" class="form-control" id="nombre" th:field="*{nombre}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="telefono">Teléfono</label>
+                                <input type="text" class="form-control" id="telefono" th:field="*{telefono}">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="vehiculo">Vehículo</label>
+                                <select class="form-control" id="vehiculo" th:field="*{vehiculo}" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option th:each="tipo : ${T(com.delivery.rutas.models.TipoVehiculo).values()}" 
+                                            th:value="${tipo}" 
+                                            th:text="${tipo}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="placaVehiculo">Placa del Vehículo</label>
+                                <input type="text" class="form-control" id="placaVehiculo" th:field="*{placaVehiculo}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group form-check mt-4">
+                                <input type="checkbox" class="form-check-input" id="activo" th:field="*{activo}">
+                                <label class="form-check-label" for="activo">Activo</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Guardar Repartidor</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Lista de repartidores -->
+        <div class="card">
+            <div class="card-header">
+                <h5>Lista de Repartidores</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Teléfono</th>
+                                <th>Vehículo</th>
+                                <th>Placa</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="repartidor : ${repartidores}">
+                                <td th:text="${repartidor.id}"></td>
+                                <td th:text="${repartidor.nombre}"></td>
+                                <td th:text="${repartidor.telefono}"></td>
+                                <td th:text="${repartidor.vehiculo}"></td>
+                                <td th:text="${repartidor.placaVehiculo}"></td>
+                                <td>
+                                    <span th:if="${repartidor.activo}" class="badge bg-success">Activo</span>
+                                    <span th:unless="${repartidor.activo}" class="badge bg-danger">Inactivo</span>
+                                </td>
+                                <td>
+                                    <a th:href="@{/web/repartidores/editar/{id}(id=${repartidor.id})}" class="btn btn-sm btn-primary">Editar</a>
+                                    <a th:href="@{/web/repartidores/eliminar/{id}(id=${repartidor.id})}" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este repartidor?')">Eliminar</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

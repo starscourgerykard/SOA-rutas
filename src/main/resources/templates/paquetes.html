@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Paquetes - Sistema de Rutas</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <h1 class="mb-4">Gestión de Paquetes</h1>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5>Agregar Nuevo Paquete</h5>
+    </div>
+    <div class="card-body">
+      <form th:action="@{/web/paquetes}" th:object="${paquete}" method="post">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="clienteId">Cliente</label>
+              <select class="form-control" id="clienteId" name="clienteId" required>
+                <option value="">Seleccionar Cliente...</option>
+                <option th:each="cliente : ${clientes}"
+                        th:value="${cliente.id}"
+                        th:text="${cliente.nombre}"></option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="destino">Dirección de Destino</label>
+              <input type="text" class="form-control" id="destino" th:field="*{destino}" required>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-8">
+            <div class="form-group">
+              <label for="descripcion">Descripción</label>
+              <input type="text" class="form-control" id="descripcion" th:field="*{descripcion}">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="pesoKg">Peso (Kg)</label>
+              <input type="number" step="0.01" class="form-control" id="pesoKg" th:field="*{pesoKg}">
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Guardar Paquete</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h5>Lista de Paquetes</h5>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Destino</th>
+            <th>Descripción</th>
+            <th>Peso (Kg)</th>
+            <th>Estado</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="paquete : ${paquetes}">
+            <td th:text="${paquete.id}"></td>
+            <td th:text="${paquete.cliente.nombre}"></td>
+            <td th:text="${paquete.destino}"></td>
+            <td th:text="${paquete.descripcion}"></td>
+            <td th:text="${paquete.pesoKg}"></td>
+            <td>
+              <span th:text="${paquete.estado}" class="badge bg-info"></span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

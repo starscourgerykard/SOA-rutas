@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Dashboard - Sistema de Rutas</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h1 class="mb-4">Resumen</h1>
+        
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card dashboard-card text-white bg-primary">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Repartidores</h5>
+                        <h2 th:text="${totalRepartidores}">0</h2>
+                        <a th:href="@{/web/repartidores}" class="text-white">Ver todos</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card dashboard-card text-white bg-success">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Clientes</h5>
+                        <h2 th:text="${totalClientes}">0</h2>
+                        <a th:href="@{/web/clientes}" class="text-white">Ver todos</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card dashboard-card text-white bg-warning">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Paquetes</h5>
+                        <h2 th:text="${totalPaquetes}">0</h2>
+                        <a th:href="@{/web/paquetes}" class="text-white">Ver todos</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card dashboard-card text-white bg-info">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Rutas</h5>
+                        <h2 th:text="${totalRutas}">0</h2>
+                        <a th:href="@{/web/rutas}" class="text-white">Ver todos</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Resumen del Sistema</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>API Rest Spring Boot + Java + MySQL .</p>
+                        <ul>
+                            <li>Spring Boot 3.5.5</li>
+                            <li>Java 1.7 </li>
+                            <li>MySQL </li>
+                        </ul>
+                        <p>Utiliza el menú lateral para navegar entre las diferentes secciones.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Acciones Rápidas</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a th:href="@{/web/repartidores}" class="btn btn-primary">Agregar Repartidor</a>
+                            <a th:href="@{/web/clientes}" class="btn btn-success">Agregar Cliente</a>
+                            <a th:href="@{/web/paquetes}" class="btn btn-warning">Agregar Paquete</a>
+                            <a th:href="@{/web/rutas}" class="btn btn-info">Crear Ruta</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
