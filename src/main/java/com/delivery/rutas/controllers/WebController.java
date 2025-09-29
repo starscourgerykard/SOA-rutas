@@ -1,5 +1,7 @@
 package com.delivery.rutas.controllers;
 
+
+
 import com.delivery.rutas.models.*;
 import com.delivery.rutas.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +28,9 @@ public class WebController {
     @Autowired
     private RutaService rutaService;
     
-    // Página principal
+    // ==================== PÁGINA PRINCIPAL ====================
     @GetMapping("")
-    public String index(Model model) {
-        // Obtener conteos para el dashboard
+     public String index(Model model) {
         long totalRepartidores = repartidorService.obtenerTodosRepartidores().size();
         long totalClientes = clienteService.obtenerTodosClientes().size();
         long totalPaquetes = paqueteService.obtenerTodosPaquetes().size();
@@ -43,7 +44,7 @@ public class WebController {
         return "index";
     }
     
-    // Gestión de Repartidores
+    // ==================== GESTIÓN DE REPARTIDORES ====================
     @GetMapping("/repartidores")
     public String listarRepartidores(Model model) {
         List<Repartidor> repartidores = repartidorService.obtenerTodosRepartidores();
@@ -52,33 +53,34 @@ public class WebController {
         return "repartidores";
     }
 
-  // EN @GetMapping("/repartidores/editar/{id}")
-  @GetMapping("/repartidores/editar/{id}")
-  public String mostrarFormularioEditarRepartidor(@PathVariable Long id, Model model) {
-    Repartidor repartidor = repartidorService.obtenerRepartidorPorId(id)
-      .orElseThrow(() -> new IllegalArgumentException("ID de Repartidor no válido:" + id));
-    model.addAttribute("repartidor", repartidor);
-    return "editar-repartidor"; // Necesitarás crear esta vista HTML.
-  }
+    @PostMapping("/repartidores")
+    public String crearRepartidor(@ModelAttribute Repartidor repartidor) {
+        repartidorService.guardarRepartidor(repartidor);
+        return "redirect:/web/repartidores";
+    }
 
-  @PostMapping("/repartidores/editar/{id}")
-  public String actualizarRepartidor(@PathVariable Long id, @ModelAttribute Repartidor repartidorDetalles) {
-    // Obtenemos el repartidor existente de la base de datos
-    Repartidor repartidorExistente = repartidorService.obtenerRepartidorPorId(id)
-      .orElseThrow(() -> new IllegalArgumentException("ID de Repartidor no válido:" + id));
+    @GetMapping("/repartidores/editar/{id}")
+    public String mostrarFormularioEditarRepartidor(@PathVariable Long id, Model model) {
+        Repartidor repartidor = repartidorService.obtenerRepartidorPorId(id)
+            .orElseThrow(() -> new IllegalArgumentException("ID de Repartidor no válido:" + id));
+        model.addAttribute("repartidor", repartidor);
+        return "editar-repartidor";
+    }
 
-    // Actualizamos los campos del objeto existente con los datos del formulario
-    repartidorExistente.setNombre(repartidorDetalles.getNombre());
-    repartidorExistente.setTelefono(repartidorDetalles.getTelefono());
-    repartidorExistente.setVehiculo(repartidorDetalles.getVehiculo());
-    repartidorExistente.setPlacaVehiculo(repartidorDetalles.getPlacaVehiculo());
-    repartidorExistente.setActivo(repartidorDetalles.getActivo());
+    @PostMapping("/repartidores/editar/{id}")
+    public String actualizarRepartidor(@PathVariable Long id, @ModelAttribute Repartidor repartidorDetalles) {
+        Repartidor repartidorExistente = repartidorService.obtenerRepartidorPorId(id)
+            .orElseThrow(() -> new IllegalArgumentException("ID de Repartidor no válido:" + id));
 
-    // Guardamos el objeto actualizado
-    repartidorService.guardarRepartidor(repartidorExistente);
+        repartidorExistente.setNombre(repartidorDetalles.getNombre());
+        repartidorExistente.setTelefono(repartidorDetalles.getTelefono());
+        repartidorExistente.setVehiculo(repartidorDetalles.getVehiculo());
+        repartidorExistente.setPlacaVehiculo(repartidorDetalles.getPlacaVehiculo());
+        repartidorExistente.setActivo(repartidorDetalles.getActivo());
 
-    return "redirect:/web/repartidores";
-  }
+        repartidorService.guardarRepartidor(repartidorExistente);
+        return "redirect:/web/repartidores";
+    }
     
     @GetMapping("/repartidores/eliminar/{id}")
     public String eliminarRepartidor(@PathVariable Long id) {
@@ -86,7 +88,7 @@ public class WebController {
         return "redirect:/web/repartidores";
     }
     
-    // Gestión de Clientes (similar a repartidores)
+    // ==================== GESTIÓN DE CLIENTES ====================
     @GetMapping("/clientes")
     public String listarClientes(Model model) {
         List<Cliente> clientes = clienteService.obtenerTodosClientes();
@@ -100,8 +102,36 @@ public class WebController {
         clienteService.guardarCliente(cliente);
         return "redirect:/web/clientes";
     }
+
+    @GetMapping("/clientes/editar/{id}")
+    public String mostrarFormularioEditarCliente(@PathVariable Long id, Model model) {
+        Cliente cliente = clienteService.obtenerClientePorId(id)
+            .orElseThrow(() -> new IllegalArgumentException("ID de Cliente no válido:" + id));
+        model.addAttribute("cliente", cliente);
+        return "editar-cliente";
+    }
+
+    @PostMapping("/clientes/editar/{id}")
+    public String actualizarCliente(@PathVariable Long id, @ModelAttribute Cliente clienteDetalles) {
+        Cliente clienteExistente = clienteService.obtenerClientePorId(id)
+            .orElseThrow(() -> new IllegalArgumentException("ID de Cliente no válido:" + id));
+        
+        clienteExistente.setNombre(clienteDetalles.getNombre());
+        clienteExistente.setDireccion(clienteDetalles.getDireccion());
+        clienteExistente.setTelefono(clienteDetalles.getTelefono());
+        clienteExistente.setEmail(clienteDetalles.getEmail());
+        
+        clienteService.guardarCliente(clienteExistente);
+        return "redirect:/web/clientes";
+    }
+
+    @GetMapping("/clientes/eliminar/{id}")
+    public String eliminarCliente(@PathVariable Long id) {
+        clienteService.eliminarCliente(id);
+        return "redirect:/web/clientes";
+    }
     
-    // Gestión de Paquetes
+    // ==================== GESTIÓN DE PAQUETES ====================
     @GetMapping("/paquetes")
     public String listarPaquetes(Model model) {
         List<Paquete> paquetes = paqueteService.obtenerTodosPaquetes();
@@ -112,21 +142,49 @@ public class WebController {
         return "paquetes";
     }
 
+    @PostMapping("/paquetes")
+    public String crearPaquete(@ModelAttribute Paquete paquete, @RequestParam Long clienteId) {
+        Cliente cliente = clienteService.obtenerClientePorId(clienteId)
+            .orElseThrow(() -> new IllegalArgumentException("ID de Cliente no válido:" + clienteId));
 
-  // EN @PostMapping("/paquetes")
-  @PostMapping("/paquetes")
-  public String crearPaquete(@ModelAttribute Paquete paquete, @RequestParam Long clienteId) {
-    // Hacemos lo mismo para el cliente
-    Cliente cliente = clienteService.obtenerClientePorId(clienteId)
-      .orElseThrow(() -> new IllegalArgumentException("ID de Cliente no válido:" + clienteId));
+        paquete.setCliente(cliente);
+        paqueteService.guardarPaquete(paquete);
+        return "redirect:/web/paquetes";
+    }
 
-    paquete.setCliente(cliente);
-    paqueteService.guardarPaquete(paquete);
-    return "redirect:/web/paquetes";
-  }
+    @GetMapping("/paquetes/editar/{id}")
+    public String mostrarFormularioEditarPaquete(@PathVariable Long id, Model model) {
+        Paquete paquete = paqueteService.obtenerPaquetePorId(id)
+            .orElseThrow(() -> new IllegalArgumentException("ID de Paquete no válido:" + id));
+        List<Cliente> clientes = clienteService.obtenerTodosClientes();
+        model.addAttribute("paquete", paquete);
+        model.addAttribute("clientes", clientes);
+        return "editar-paquete";
+    }
+
+    @PostMapping("/paquetes/editar/{id}")
+    public String actualizarPaquete(@PathVariable Long id, @ModelAttribute Paquete paqueteDetalles, @RequestParam Long clienteId) {
+        Paquete paqueteExistente = paqueteService.obtenerPaquetePorId(id)
+            .orElseThrow(() -> new IllegalArgumentException("ID de Paquete no válido:" + id));
+        Cliente cliente = clienteService.obtenerClientePorId(clienteId)
+            .orElseThrow(() -> new IllegalArgumentException("ID de Cliente no válido:" + clienteId));
+        
+        paqueteExistente.setCliente(cliente);
+        paqueteExistente.setDestino(paqueteDetalles.getDestino());
+        paqueteExistente.setDescripcion(paqueteDetalles.getDescripcion());
+        paqueteExistente.setPesoKg(paqueteDetalles.getPesoKg());
+        
+        paqueteService.guardarPaquete(paqueteExistente);
+        return "redirect:/web/paquetes";
+    }
+
+    @GetMapping("/paquetes/eliminar/{id}")
+    public String eliminarPaquete(@PathVariable Long id) {
+        paqueteService.eliminarPaquete(id);
+        return "redirect:/web/paquetes";
+    }
          
-    
-    // Gestión de Rutas
+    // ==================== GESTIÓN DE RUTAS ====================
     @GetMapping("/rutas")
     public String listarRutas(Model model) {
         List<Ruta> rutas = rutaService.obtenerTodasRutas();
@@ -137,23 +195,44 @@ public class WebController {
         return "rutas";
     }
 
+    @PostMapping("/rutas")
+    public String crearRuta(@ModelAttribute Ruta ruta, @RequestParam Long repartidorId) {
+        Repartidor repartidor = repartidorService.obtenerRepartidorPorId(repartidorId)
+            .orElseThrow(() -> new IllegalArgumentException("ID de Repartidor no válido:" + repartidorId));
 
-  // EN @PostMapping("/rutas")
-  @PostMapping("/rutas")
-  public String crearRuta(@ModelAttribute Ruta ruta, @RequestParam Long repartidorId) {
-    // "Saca" el repartidor del Optional. Si no existe, lanza una excepción.
-    Repartidor repartidor = repartidorService.obtenerRepartidorPorId(repartidorId)
-      .orElseThrow(() -> new IllegalArgumentException("ID de Repartidor no válido:" + repartidorId));
+        ruta.setRepartidor(repartidor);
+        rutaService.guardarRuta(ruta);
+        return "redirect:/web/rutas";
+    }
 
-    ruta.setRepartidor(repartidor); // ¡Ahora sí funciona!
-    rutaService.guardarRuta(ruta);
-    return "redirect:/web/rutas";
+    @GetMapping("/rutas/editar/{id}")
+    public String mostrarFormularioEditarRuta(@PathVariable Long id, Model model) {
+        Ruta ruta = rutaService.obtenerRutaPorId(id)
+            .orElseThrow(() -> new IllegalArgumentException("ID de Ruta no válido:" + id));
+        List<Repartidor> repartidores = repartidorService.obtenerRepartidoresActivos();
+        model.addAttribute("ruta", ruta);
+        model.addAttribute("repartidores", repartidores);
+        return "editar-ruta";
+    }
+
+    @PostMapping("/rutas/editar/{id}")
+    public String actualizarRuta(@PathVariable Long id, @ModelAttribute Ruta rutaDetalles, @RequestParam Long repartidorId) {
+        Ruta rutaExistente = rutaService.obtenerRutaPorId(id)
+            .orElseThrow(() -> new IllegalArgumentException("ID de Ruta no válido:" + id));
+        Repartidor repartidor = repartidorService.obtenerRepartidorPorId(repartidorId)
+            .orElseThrow(() -> new IllegalArgumentException("ID de Repartidor no válido:" + repartidorId));
+        
+        rutaExistente.setRepartidor(repartidor);
+        rutaExistente.setFecha(rutaDetalles.getFecha());
+        rutaExistente.setKmEstimados(rutaDetalles.getKmEstimados());
+        
+        rutaService.guardarRuta(rutaExistente);
+        return "redirect:/web/rutas";
+    }
+
+    @GetMapping("/rutas/eliminar/{id}")
+    public String eliminarRuta(@PathVariable Long id) {
+        rutaService.eliminarRuta(id);
+        return "redirect:/web/rutas";
+    }
   }
-
-  // Agrega este método DENTRO de la clase WebController
-  @PostMapping("/repartidores")
-  public String crearRepartidor(@ModelAttribute Repartidor repartidor) {
-    repartidorService.guardarRepartidor(repartidor);
-    return "redirect:/web/repartidores";
-  }
-}

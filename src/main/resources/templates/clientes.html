@@ -62,6 +62,7 @@
             <th>Dirección</th>
             <th>Teléfono</th>
             <th>Email</th>
+            <th>Acciones</th> <!-- Nueva columna -->
           </tr>
           </thead>
           <tbody>
@@ -71,6 +72,13 @@
             <td th:text="${cliente.direccion}"></td>
             <td th:text="${cliente.telefono}"></td>
             <td th:text="${cliente.email}"></td>
+            <td>
+              <a th:href="@{/web/clientes/editar/{id}(id=${cliente.id})}" 
+                 class="btn btn-sm btn-primary">Editar</a>
+              <a th:href="@{/web/clientes/eliminar/{id}(id=${cliente.id})}" 
+                 class="btn btn-sm btn-danger" 
+                 onclick="return confirm('¿Estás seguro de eliminar este cliente?')">Eliminar</a>
+            </td>
           </tr>
           </tbody>
         </table>

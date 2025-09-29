@@ -68,6 +68,7 @@
             <th>Descripción</th>
             <th>Peso (Kg)</th>
             <th>Estado</th>
+            <th>Acciones</th> <!-- Nueva columna -->
           </tr>
           </thead>
           <tbody>
@@ -79,6 +80,13 @@
             <td th:text="${paquete.pesoKg}"></td>
             <td>
               <span th:text="${paquete.estado}" class="badge bg-info"></span>
+            </td>
+            <td>
+              <a th:href="@{/web/paquetes/editar/{id}(id=${paquete.id})}" 
+                 class="btn btn-sm btn-primary">Editar</a>
+              <a th:href="@{/web/paquetes/eliminar/{id}(id=${paquete.id})}" 
+                 class="btn btn-sm btn-danger" 
+                 onclick="return confirm('¿Estás seguro de eliminar este paquete?')">Eliminar</a>
             </td>
           </tr>
           </tbody>

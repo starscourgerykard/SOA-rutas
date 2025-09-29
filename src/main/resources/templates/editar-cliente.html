@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Editar Cliente - Sistema de Rutas</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <h1 class="mb-4">Editar Cliente</h1>
+
+  <div class="card">
+    <div class="card-body">
+      <form th:action="@{/web/clientes/editar/{id}(id=${cliente.id})}" th:object="${cliente}" method="post">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="nombre">Nombre</label>
+              <input type="text" class="form-control" id="nombre" th:field="*{nombre}" required>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" th:field="*{email}">
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-8">
+            <div class="form-group">
+              <label for="direccion">Dirección</label>
+              <input type="text" class="form-control" id="direccion" th:field="*{direccion}" required>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="telefono">Teléfono</label>
+              <input type="text" class="form-control" id="telefono" th:field="*{telefono}">
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Actualizar Cliente</button>
+        <a th:href="@{/web/clientes}" class="btn btn-secondary mt-3">Cancelar</a>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

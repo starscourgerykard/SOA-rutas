@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Editar Ruta - Sistema de Rutas</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <h1 class="mb-4">Editar Ruta</h1>
+
+  <div class="card">
+    <div class="card-body">
+      <form th:action="@{/web/rutas/editar/{id}(id=${ruta.id})}" th:object="${ruta}" method="post">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="repartidorId">Repartidor</label>
+              <select class="form-control" id="repartidorId" name="repartidorId" required>
+                <option value="">Seleccionar Repartidor...</option>
+                <option th:each="repartidor : ${repartidores}"
+                        th:value="${repartidor.id}"
+                        th:text="${repartidor.nombre}"
+                        th:selected="${repartidor.id == ruta.repartidor.id}"></option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="fecha">Fecha</label>
+              <input type="date" class="form-control" id="fecha" th:field="*{fecha}" required>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="kmEstimados">KM Estimados</label>
+              <input type="number" step="0.1" class="form-control" id="kmEstimados" th:field="*{kmEstimados}">
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Actualizar Ruta</button>
+        <a th:href="@{/web/rutas}" class="btn btn-secondary mt-3">Cancelar</a>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

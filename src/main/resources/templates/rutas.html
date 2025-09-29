@@ -59,6 +59,7 @@
             <th>Fecha</th>
             <th>KM Estimados</th>
             <th>Estado</th>
+            <th>Acciones</th> <!-- Nueva columna -->
           </tr>
           </thead>
           <tbody>
@@ -69,6 +70,13 @@
             <td th:text="${ruta.kmEstimados}"></td>
             <td>
               <span th:text="${ruta.estado}" class="badge bg-primary"></span>
+            </td>
+            <td>
+              <a th:href="@{/web/rutas/editar/{id}(id=${ruta.id})}" 
+                 class="btn btn-sm btn-primary">Editar</a>
+              <a th:href="@{/web/rutas/eliminar/{id}(id=${ruta.id})}" 
+                 class="btn btn-sm btn-danger" 
+                 onclick="return confirm('¿Estás seguro de eliminar esta ruta?')">Eliminar</a>
             </td>
           </tr>
           </tbody>
